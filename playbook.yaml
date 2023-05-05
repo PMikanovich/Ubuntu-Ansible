@@ -1,0 +1,27 @@
+- name: Update web servers
+  hosts: hosts
+  remote_user: administrator
+  become: yes
+  become_method: sudo
+
+  tasks:
+  - name: Install dependencies
+    ansible.builtin.apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - apache2
+      - ghostscript
+      - libapache2-mod-php
+      - mysql-server
+      - php
+      - php-bcmath
+      - php-curl
+      - php-imagick
+      - php-intl
+      - php-json
+      - php-mbstring
+      - php-mysql
+      - php-xml
+      - php-zip
+
