@@ -24,4 +24,19 @@
       - php-mysql
       - php-xml
       - php-zip
-
+  - name: Add wordpress user
+    ansible.builtin.user:
+      name: www-data
+      uid: 1040
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: /srv/www
+      state: directory
+      owner: www-data
+      mode: '0755'
+  - name: download tar wordpress
+    ansible.builtin.unarchive:
+      src: https://wordpress.org/latest.tar.gz
+      dest: /srv/www
+      remote_src: yes
+      owner: www-data  # need to check permissions 
