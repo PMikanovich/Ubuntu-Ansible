@@ -1,0 +1,50 @@
+- name: Update web servers
+  hosts: hosts
+  remote_user: administrator
+  become: yes
+  become_method: sudo
+
+  tasks:
+  - name: Install dependencies
+    ansible.builtin.apt:
+      name:
+        - apache2
+        - ghostscript
+        - libapache2-mod-php
+        - mysql-server
+        - php
+        - php-bcmath
+        - php-curl
+        - php-imagick
+        - php-intl
+        - php-json
+        - php-mbstring
+        - php-mysql
+        - php-xml
+        - php-zip
+      state: present
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: /srv/www
+      state: directory
+      owner: www-data
+      mode: '0755'
+  - name: download tar wordpress
+    ansible.builtin.unarchive:
+      src: https://wordpress.org/latest.tar.gz
+      dest: /srv/www
+      remote_src: yes
+      owner: www-data
+  - name: Configure Apache for WordPress
+    ansible.builtin.template:
+      src: templates/wordpress.conf.j2
+      dest: /etc/apache2/sites-available/wordpress.conf
+  - name: Enable site
+    ansible.builtin.shell: |
+      a2ensite wordpress
+      a2enmod rewrite
+      a2dissite 000-default
+  - name: Reload service apache2
+    ansible.builtin.service:
+      name: apache2
+      state: reloaded 
