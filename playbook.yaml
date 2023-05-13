@@ -55,5 +55,5 @@
       src: templates/init_db.sql.j2
       dest: /tmp/init_db.sql
   - name: init db
-    ansible.builtin.shell: mysql -u root < script.sql
+    ansible.builtin.shell: mysql -u root < /tmp/init_db.sql
     
