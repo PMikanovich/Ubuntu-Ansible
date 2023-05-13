@@ -1,6 +1,8 @@
 - name: Update web servers
   hosts: hosts
   remote_user: administrator
+  vars_files:
+    - defaults.yml
   become: yes
   become_method: sudo
 
@@ -48,3 +50,10 @@
     ansible.builtin.service:
       name: apache2
       state: reloaded 
+  - name: prepaire sql script
+    ansible.builtin.template:
+      src: templates/init_db.sql.j2
+      dest: /tmp/init_db.sql
+  - name: init db
+    ansible.builtin.shell: mysql -u root < script.sql
+    
