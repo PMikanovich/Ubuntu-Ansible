@@ -2,7 +2,7 @@
   hosts: hosts
   remote_user: administrator
   vars_files:
-    - defaults.yml
+    - defaults.yaml
   become: yes
   become_method: sudo
 
